@@ -2,6 +2,7 @@
   "name": "high-ground-alert",
   "version": "1.0.0",
   "description": "",
+  "repository": "https://github.com/HighGroundAlert/high-ground-alert",
   "main": "index.js",
   "dependencies": {
     "jquery": "^2.1.4",
