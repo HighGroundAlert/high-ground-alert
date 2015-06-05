@@ -1,8 +1,5 @@
-var baseUrl = 'http://localhost:8080';
-
-var childProcess = require('child_process');
+var path = require('path');
 var fs = require('fs');
-
 var server = require('http').createServer(handler);
 
 var mime = {
@@ -24,7 +21,7 @@ function handler(req, res) {
     console.log('GET', url);
 
     fs.readFile(
-        url,
+      path.join(process.cwd(), url),
         function (err, data) {
             if (err) {
                 res.writeHead(404);
@@ -36,5 +33,4 @@ function handler(req, res) {
     );
 }
 
-server.listen(8080);
-childProcess.exec('start chrome ' + baseUrl);
+server.listen(process.env.PORT || 5000);
