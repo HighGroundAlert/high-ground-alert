@@ -8,6 +8,10 @@
     // The mudflow polygon
     var mudflow;
 
+    // The official evacuation points and routes
+    var evacPoints;
+    var evacRoutes;
+
     // Geocoder to turn address into coords
     var geocoder = new google.maps.Geocoder();
 
@@ -53,10 +57,15 @@
         for (var i = 0; i < polygons.length; i++) {
             console.log('checking polygon', i+1);
             if (gju.pointInPolygon(point, polygons[i].geometry)) {
+                findNearestEvac(point);
                 return true;
             }
         }
         return false;
+    }
+
+    function findNearestEvac(point) {
+      //gju.pointDistance();
     }
 
     var tiles = {
@@ -94,11 +103,20 @@
                 L.geoJson(json, {
                     style: function (feature) {
                         return {
-                            color: 'red' //colors[Math.floor(Math.random()*colors.length)]
+                            color: 'red'
                         };
-                    },
-                    onEachFeature: function (feature, layer) {
-                        //layer.bindPopup('Hi, my ID is ' + feature.properties.id);
+                    }
+                }).addTo(leaf);
+            });
+
+            $.getJSON('/full-evac-routes.json').then(function (json) {
+                evacRoutes = json;
+
+                L.geoJson(json, {
+                    style: function (feature) {
+                        return {
+                            color: 'blue'
+                        };
                     }
                 }).addTo(leaf);
             });
