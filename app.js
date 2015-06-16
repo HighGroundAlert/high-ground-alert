@@ -9,8 +9,8 @@
     var mudflow;
 
     // The official evacuation points and routes
-    var evacPoints;
-    var evacRoutes;
+    var evacPointsJson;
+    var evacRoutesJson;
 
     // Geocoder to turn address into coords
     var geocoder = new google.maps.Geocoder();
@@ -57,15 +57,33 @@
         for (var i = 0; i < polygons.length; i++) {
             console.log('checking polygon', i+1);
             if (gju.pointInPolygon(point, polygons[i].geometry)) {
-                findNearestEvac(point);
+                findNearestEvacPoint(point);
                 return true;
             }
         }
         return false;
     }
 
-    function findNearestEvac(point) {
-      //gju.pointDistance();
+    function findNearestEvacPoint(point) {
+      var userLocation = {"type":"Point","coordinates":[position.longitude, position.latitude]};
+      var evacPoints = evacPointsJson.features;
+      var nearestPoint = null;
+      var nearestDistance = Number.POSITIVE_INFINITY;
+      for (var mp = 0; mp < multiPoints.length; mp++) {
+            console.log('checking multiPoint: %d', mp+1);
+            
+            var coordinates = evacPoints[mp].geometry.coordinates;
+            for (var c = 0; c < coordinates.length; c++) {
+                var currentPoint = {type: 'Point', coordinates:coordinates[c]};
+                var distance = gju.pointDistance(userLocation, currentPoint);
+                console.log('distance: %d calculated to point: %d', distance, c+1);
+                if (distance < nearestDistance) {
+                    nearestDistance = distance;
+                    nearestPoint = currentPoint;
+                }
+            }
+        }
+        return nearestPoint;
     }
 
     var tiles = {
@@ -110,12 +128,24 @@
             });
 
             $.getJSON('/full-evac-routes.json').then(function (json) {
-                evacRoutes = json;
+                evacRoutesJson = json;
 
                 L.geoJson(json, {
                     style: function (feature) {
                         return {
                             color: 'blue'
+                        };
+                    }
+                }).addTo(leaf);
+            });
+
+            $.getJSON('/evac_rtes_case1_intersect_pts_wgs84.json').then(function (json) {
+                evacPointsJson = json;
+
+                L.geoJson(json, {
+                    style: function (feature) {
+                        return {
+                            color: 'green'
                         };
                     }
                 }).addTo(leaf);
