@@ -1,3 +1,5 @@
+
+
 (function() {
 
     L.Icon.Default.imagePath = '/node_modules/leaflet/dist/images';
@@ -17,6 +19,7 @@
 
     // For icon clicks and hovers
     var clicked, timeout;
+
 
     var markers = new L.FeatureGroup();
     function setPosition(position) {
@@ -71,7 +74,7 @@
       var nearestDistance = Number.POSITIVE_INFINITY;
       for (var mp = 0; mp < multiPoints.length; mp++) {
             console.log('checking multiPoint: %d', mp+1);
-            
+
             var coordinates = evacPoints[mp].geometry.coordinates;
             for (var c = 0; c < coordinates.length; c++) {
                 var currentPoint = {type: 'Point', coordinates:coordinates[c]};
@@ -102,9 +105,14 @@
         },
         componentDidMount: function() {
 
-            leaf = L.map('map').setView([1,1], 16);
-            this.setState({
-                map: leaf
+            // leaf = L.map('map').setView([1,1], 16);
+            // this.setState({
+            //     map: leaf
+            // });
+            //
+            leaf = L.map('map', {
+                center: [46.823873, -121.693061],
+                zoom: 9
             });
 
             leaf.locate({
