@@ -8,7 +8,8 @@
     "jquery": "^2.1.4",
     "geojson-utils": "^1.1.0",
     "leaflet": "^0.7.3",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "open": "0.0.5"
   },
   "devDependencies": {},
   "scripts": {

@@ -1,6 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 var server = require('http').createServer(handler);
+var open = require('open');
 
 var mime = {
     'css'   : 'text/css',
@@ -34,3 +35,5 @@ function handler(req, res) {
 }
 
 server.listen(process.env.PORT || 5000);
+console.log('go to localhost:5000');
+open('http://localhost:5000/');
